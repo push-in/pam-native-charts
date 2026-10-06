@@ -298,6 +298,25 @@ application code; do not depend on raw wire numbers.
 - **The highlight does not move:** store the index from `onSelect` in component state and pass it back through `highlight()`.
 - **Template props ignored:** bind arrays with `:series="[...]"`; plain attributes are strings and only scalars are coerced.
 
+## Examples
+
+- [`examples/WeeklyMovement.pam`](examples/WeeklyMovement.pam): a finance card with a grouped
+  bar chart (tap highlight), a sparkline and a donut, written as a `.pam` component.
+- [`examples/builder.php`](examples/builder.php): the same charts from PHP builders, with a theme,
+  a value formatter and a progress ring.
+
+## Contributing
+
+```bash
+composer install
+php tests/run.php            # scene snapshots, scales, curves, template registration
+vendor/bin/phpstan analyse   # level max
+```
+
+Every chart type has a snapshot test on its display list; add one when a chart's marks change.
+Drawing primitives belong in [`pam-native-canvas`](https://github.com/push-in/pam-native-canvas);
+this library only composes scenes.
+
 ## Compatibility and support
 
 This package targets PHP 8.5, PAM Native `1.13.x` and `pam-native-canvas` `0.2.x`.

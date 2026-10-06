@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1 - 2026-10-06
+
+- Documentation: component and builder examples, contribution notes.
+
 ## 0.2.0 - 2026-10-06
 
 - The package is now a plain Composer library: PAM Native plugins may only depend on

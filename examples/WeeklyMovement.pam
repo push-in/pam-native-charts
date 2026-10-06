@@ -1,0 +1,66 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Screens;
+
+use Pam\Native\App;
+use Pam\Native\Attributes\State;
+use Pam\Native\Component;
+
+/**
+ * A finance "movement" card: grouped bars for credits/debits per weekday with a tap highlight,
+ * a sparkline of the running balance and a donut by payment method.
+ *
+ * Register the tags once in index.php: `\Pam\Native\Charts\Charts::register();`
+ */
+final class WeeklyMovement extends Component
+{
+    /** @var list<string> */ public array $labels = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'];
+    /** @var list<float> */ #[State] public array $credits = [120.5, 80, 0, 140, 90, 200, 30];
+    /** @var list<float> */ #[State] public array $debits = [40, 60, 30, 0, 80, 50, 10];
+    #[State] public ?int $highlight = null;
+    public int $chartWidth = 300;
+
+    public function mount(): void
+    {
+        // Charts need an explicit width: the window minus the page and card padding.
+        $this->chartWidth = (int) max(200, App::windowMetrics()->width - 44 - 36);
+    }
+
+    public function select(?int $index): void
+    {
+        $this->highlight = $index;
+    }
+}
+?>
+
+<template>
+    <Column class="card">
+        <Text class="title">Movimento da semana</Text>
+        <BarChart
+            :width="$chartWidth"
+            :height="150"
+            :series="[['label' => 'Entradas', 'values' => $credits, 'color' => '#19c5ff'], ['label' => 'Saídas', 'values' => $debits, 'color' => '#7b8ea6']]"
+            :labels="$labels"
+            grouped="true"
+            legend="bottom"
+            :highlight="$highlight"
+            @select="select"
+        />
+        <Sparkline :width="120" :height="36" :values="[5, 25, 17, 22, 42, 39, 51]" color="#cdf0ff" area="true" curve="monotone" />
+        <DonutChart
+            size="160"
+            :slices="[['label' => 'Pix', 'value' => 70, 'color' => '#19c5ff'], ['label' => 'Boleto', 'value' => 20, 'color' => '#5cd0ff'], ['label' => 'Cartão', 'value' => 10, 'color' => '#7de0ff']]"
+            thickness="18"
+            title="R$ 1.234"
+            subtitle="este mês"
+            legend="bottom"
+        />
+    </Column>
+</template>
+
+<style scoped>
+    .card { gap: 16px; padding: 18px; border-radius: 22px; background-color: #101a2c; }
+    .title { font-size: 18px; font-weight: 700; color: #f2f7ff; }
+</style>
