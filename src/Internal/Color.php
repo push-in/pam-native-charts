@@ -37,6 +37,26 @@ final class Color
     }
 
     /**
+     * Converts a packed `0xAARRGGBB` integer (the form template attributes arrive in) to `#rrggbbaa`.
+     */
+    public static function fromArgb(int $argb): string
+    {
+        $argb &= 0xFFFFFFFF;
+        $alpha = ($argb >> 24) & 0xFF;
+        $rgb = $argb & 0xFFFFFF;
+
+        return '#' . str_pad(dechex($rgb), 6, '0', STR_PAD_LEFT) . str_pad(dechex($alpha), 2, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Normalizes a color given as a CSS hex string or a packed ARGB integer.
+     */
+    public static function fromMixed(string|int $color): string
+    {
+        return is_int($color) ? self::fromArgb($color) : self::normalize($color);
+    }
+
+    /**
      * Replaces the alpha channel (0..1) of a color.
      */
     public static function alpha(string $color, float $alpha): string

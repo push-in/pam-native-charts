@@ -92,7 +92,7 @@ final class ChartsPluginProvider implements PluginProvider
             ->curve(Props::curve($props['curve'] ?? null))
             ->area(Props::bool($props['area'] ?? null))
             ->endMarker(Props::bool($props['endMarker'] ?? null));
-        $color = Props::string($props['color'] ?? null);
+        $color = Props::color($props['color'] ?? null);
         $chart = $color === null ? $chart : $chart->color($color);
         $theme = Props::theme($props['theme'] ?? null);
 
@@ -108,9 +108,9 @@ final class ChartsPluginProvider implements PluginProvider
             ->progress(Props::float($props['progress'] ?? null))
             ->thickness(Props::float($props['thickness'] ?? null, 6.0))
             ->label(Props::string($props['label'] ?? null));
-        $color = Props::string($props['color'] ?? null);
+        $color = Props::color($props['color'] ?? null);
         $chart = $color === null ? $chart : $chart->color($color);
-        $track = Props::string($props['track'] ?? null);
+        $track = Props::color($props['track'] ?? null);
         $chart = $track === null ? $chart : $chart->track($track);
         $theme = Props::theme($props['theme'] ?? null);
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 - 2026-10-06
+
+- Accept colors as packed `0xAARRGGBB` integers (the form template attributes and
+  bound arrays arrive in) for series, slices, `color`, `track` and theme values.
+
+
 ## 0.1.0 - 2026-10-05
 
 - Initial public release.

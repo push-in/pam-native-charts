@@ -69,6 +69,18 @@ final class Props
         return is_string($value) && is_numeric(trim($value)) ? (float) trim($value) : $default;
     }
 
+    /**
+     * A chart color from a CSS hex string or a packed ARGB integer (how template attributes arrive).
+     */
+    public static function color(mixed $value): ?string
+    {
+        if (is_string($value) && str_starts_with(trim($value), '#')) {
+            return Color::normalize(trim($value));
+        }
+
+        return is_int($value) ? Color::fromArgb($value) : null;
+    }
+
     public static function string(mixed $value, ?string $default = null): ?string
     {
         if (is_string($value)) {
@@ -151,7 +163,7 @@ final class Props
             }
 
             $entry = Series::make(self::string($item['label'] ?? null, '') ?? '', self::floatList($item['values'] ?? []));
-            $color = self::string($item['color'] ?? null);
+            $color = self::color($item['color'] ?? null);
             $series[] = $color === null ? $entry : $entry->color($color);
         }
 
@@ -177,7 +189,7 @@ final class Props
             }
 
             $slice = Slice::make(self::string($item['label'] ?? null, '') ?? '', self::float($item['value'] ?? 0.0));
-            $color = self::string($item['color'] ?? null);
+            $color = self::color($item['color'] ?? null);
             $slices[] = $color === null ? $slice : $slice->color($color);
         }
 

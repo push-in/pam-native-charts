@@ -413,6 +413,18 @@ $test('registers the declarative chart tags', static function (): void {
     TemplateRegistry::reset();
 });
 
+$test('accepts packed ARGB integer colors from templates', static function (): void {
+    expect(\Pam\Native\Charts\Internal\Color::fromArgb(0xFF19C5FF) === '#19c5ffff', 'ARGB integers convert to #rrggbbaa.');
+    expect(\Pam\Native\Charts\Internal\Color::fromArgb(0x8019C5FF) === '#19c5ff80', 'ARGB alpha is preserved.');
+    expect(\Pam\Native\Charts\Internal\Props::color(0xFF19C5FF) === '#19c5ffff', 'Props::color accepts integers.');
+    expect(\Pam\Native\Charts\Internal\Props::color('#19c5ff') === '#19c5ffff', 'Props::color accepts hex strings.');
+    expect(\Pam\Native\Charts\Internal\Props::color('oops') === null, 'Props::color ignores non-colors.');
+    $series = \Pam\Native\Charts\Internal\Props::series([['label' => 'A', 'values' => [1, 2], 'color' => 0xFF19C5FF]]);
+    expect(count($series) === 1, 'Series parsed from an array with an integer color.');
+    $theme = \Pam\Native\Charts\ChartTheme::fromArray(['primary' => 0xFF19C5FF, 'ink' => '#fff']);
+    expect($theme->primary === '#19c5ffff', 'Theme accepts integer colors.');
+});
+
 $failed = 0;
 
 foreach ($tests as $name => $body) {

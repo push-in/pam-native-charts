@@ -79,7 +79,7 @@ final readonly class ChartTheme
         $read = static function (string $key, string $default) use ($values): string {
             $value = $values[$key] ?? null;
 
-            return is_string($value) ? $value : $default;
+            return is_string($value) || is_int($value) ? Internal\Color::fromMixed($value) : $default;
         };
 
         return self::make(
@@ -88,7 +88,7 @@ final readonly class ChartTheme
             $read('muted', $base->muted),
             $read('grid', $base->grid),
             $read('surface', $base->surface),
-            is_string($values['primary'] ?? null) ? null : $base->palette,
+            is_string($values['primary'] ?? null) || is_int($values['primary'] ?? null) ? null : $base->palette,
         );
     }
 
