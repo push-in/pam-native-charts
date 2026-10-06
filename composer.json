@@ -1,7 +1,7 @@
 {
     "name": "pushinbr/pam-native-charts",
     "description": "Native charts for PAM Native: line, area, bar, donut, sparkline and progress ring drawn on pam-native-canvas.",
-    "type": "pam-native-plugin",
+    "type": "library",
     "license": "Apache-2.0",
     "keywords": [
         "pam",
@@ -29,11 +29,6 @@
     "autoload": {
         "psr-4": {
             "Pam\\Native\\Charts\\": "src/"
-        }
-    },
-    "extra": {
-        "pam-native": {
-            "plugin": "pam-native.plugin.json"
         }
     },
     "scripts": {

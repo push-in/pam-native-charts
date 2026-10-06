@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0 - 2026-10-06
+
+- The package is now a plain Composer library: PAM Native plugins may only depend on
+  the core SDK, and charts build on the `pam-native-canvas` plugin. Register the
+  tags with `Charts::register()` in `index.php`.
+
+
 ## 0.1.1 - 2026-10-06
 
 - Accept colors as packed `0xAARRGGBB` integers (the form template attributes and
