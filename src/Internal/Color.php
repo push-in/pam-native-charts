@@ -1,0 +1,57 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Pam\Native\Charts\Internal;
+
+use InvalidArgumentException;
+
+/**
+ * CSS hex color helpers. Every color leaves here as lowercase `#rrggbbaa`.
+ *
+ * @internal
+ */
+final class Color
+{
+    private function __construct()
+    {
+    }
+
+    /**
+     * Accepts `#rgb`, `#rrggbb` and `#rrggbbaa`; anything else is rejected.
+     */
+    public static function normalize(string $color): string
+    {
+        $hex = strtolower(ltrim($color, '#'));
+
+        if (!str_starts_with($color, '#') || preg_match('/^[0-9a-f]+$/D', $hex) !== 1) {
+            throw new InvalidArgumentException("Invalid chart color \"{$color}\".");
+        }
+
+        return match (strlen($hex)) {
+            3 => '#' . $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2] . 'ff',
+            6 => '#' . $hex . 'ff',
+            8 => '#' . $hex,
+            default => throw new InvalidArgumentException("Invalid chart color \"{$color}\"."),
+        };
+    }
+
+    /**
+     * Replaces the alpha channel (0..1) of a color.
+     */
+    public static function alpha(string $color, float $alpha): string
+    {
+        $alpha = max(0.0, min(1.0, $alpha));
+        $byte = (int) round($alpha * 255);
+
+        return substr(self::normalize($color), 0, 7) . str_pad(dechex($byte), 2, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Alpha channel of a color as 0..1.
+     */
+    public static function opacity(string $color): float
+    {
+        return hexdec(substr(self::normalize($color), 7, 2)) / 255;
+    }
+}

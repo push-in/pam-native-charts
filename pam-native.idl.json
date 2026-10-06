@@ -1,0 +1,21 @@
+{
+    "$schema": "vendor/pushinbr/pam-native-plugin-kit/resources/pam-native.idl.schema.json",
+    "version": 1,
+    "namespace": "Pam.Charts",
+    "enums": {
+        "Curve": {
+            "Linear": 1,
+            "Monotone": 2
+        },
+        "LegendPosition": {
+            "None": 1,
+            "Top": 2,
+            "Bottom": 3
+        },
+        "BarLayout": {
+            "Grouped": 1,
+            "Stacked": 2
+        }
+    },
+    "records": {}
+}
