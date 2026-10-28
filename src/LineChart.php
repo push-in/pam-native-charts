@@ -21,13 +21,20 @@ use Pam\Native\Charts\Internal\Paths;
  *     ->area()
  *     ->highlight(2);
  * ```
- *
- * @phpstan-consistent-constructor
  */
 class LineChart extends CartesianChart
 {
     protected Curve $curve = Curve::Linear;
     protected bool $area = false;
+
+    /**
+     * Final so `make()` can safely build subclasses with `new static()`:
+     * every LineChart variant shares this exact constructor signature.
+     */
+    final protected function __construct(float $width, float $height)
+    {
+        parent::__construct($width, $height);
+    }
 
     public static function make(float|int $width, float|int $height): static
     {
