@@ -21,7 +21,12 @@ jobs:
       - run: composer update --prefer-dist --no-interaction --no-progress
       - run: php -d auto_prepend_file=vendor/autoload.php tests/run.php
       - run: vendor/bin/phpstan analyse --no-progress
-      - run: |
-          vendor/bin/pam-native-plugin validate pam-native.plugin.json
-          vendor/bin/pam-native-plugin conformance . --json > conformance.json
-          jq -e '[.checks[] | select(.checkCode != 5 and .checkCode != 6) | .resultCode == 1] | all' conformance.json
+      # Charts ships as a plain Composer library (it builds on pam-native-canvas,
+      # and plugins may only depend on the core SDK), so there is no plugin
+      # manifest to validate; its typed IDL must still compile deterministically.
+      - name: Library contracts
+        run: |
+          test ! -e pam-native.plugin.json
+          vendor/bin/pam-native-plugin compile pam-native.idl.json "${RUNNER_TEMP}/idl-a"
+          vendor/bin/pam-native-plugin compile pam-native.idl.json "${RUNNER_TEMP}/idl-b"
+          diff -r "${RUNNER_TEMP}/idl-a" "${RUNNER_TEMP}/idl-b"
